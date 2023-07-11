@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static float speed = 15f; // 기본 15가 딱좋아보임
     Rigidbody rigid;
-    PlayerMoveMent moveMent;
+    PlayerMoveMent moveMent;    
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
-        moveMent = new PlayerMoveMent(this.gameObject);
+        moveMent = new PlayerMoveMent(rigid);
+    }
+    private void Update()
+    {
+        
     }
 
     private void LateUpdate()
@@ -21,13 +26,15 @@ public class Player : MonoBehaviour
 }
 class PlayerMoveMent
 {
-    GameObject current;
-    public PlayerMoveMent(GameObject gameObject)
+    Rigidbody current;
+    public PlayerMoveMent(Rigidbody rigidbody)
     {
-        this.current = gameObject;
+        this.current = rigidbody;
     }
     public void Moving()
     {
-        Debug.Log("asd");
+        float h = Input.GetAxisRaw("Horizontal") * Time.deltaTime * Player.speed;
+        float v = Input.GetAxisRaw("Vertical") * Time.deltaTime * Player.speed;
+        current.AddForce(new Vector3(h, 0, v), ForceMode.VelocityChange);
     }
 }
