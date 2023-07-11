@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public static float speed = 15f; // 기본 15가 딱좋아보임
+    public static float speed = 50f; // 기본 50 딱좋아보임
+    public static float jump = 80f;
+    public static int bounce = 0;
     Rigidbody rigid;
     PlayerMoveMent moveMent;
     PlayerDetectListener detectListener;
@@ -17,7 +19,9 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-        
+        /*if (Input.GetKeyDown(KeyCode.Alpha1)) speed++;
+        if (Input.GetKeyDown(KeyCode.Alpha2)) speed--;
+        Debug.Log(speed);*/
     }
 
     private void LateUpdate()
@@ -27,7 +31,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "ground") Debug.Log("바닥과 충돌");
+        if (collision.gameObject.tag == "ground") detectListener.OnDetectGround();
     }
 
 }
@@ -44,7 +48,7 @@ class PlayerMoveMent
     {
         float h = Input.GetAxisRaw("Horizontal") * Time.deltaTime * Player.speed;
         float v = Input.GetAxisRaw("Vertical") * Time.deltaTime * Player.speed;
-        rigid.AddForce(new Vector3(h, 0, v), ForceMode.VelocityChange);
+        rigid.AddForce(new Vector3(h, 0, v), ForceMode.Impulse);
     }
 }
 class PlayerDetectListener
@@ -55,5 +59,11 @@ class PlayerDetectListener
     {
         this.current = gameObject;
         rigid = gameObject.GetComponent<Rigidbody>();
+    }
+    public void OnDetectGround()
+    {
+        rigid.AddForce(new Vector3(0,Player.jump,0), ForceMode.Impulse);
+        Player.bounce++;
+        Debug.Log(Player.bounce);
     }
 }
