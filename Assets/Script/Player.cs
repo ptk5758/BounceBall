@@ -6,12 +6,14 @@ public class Player : MonoBehaviour
 {
     public static float speed = 15f; // 기본 15가 딱좋아보임
     Rigidbody rigid;
-    PlayerMoveMent moveMent;    
+    PlayerMoveMent moveMent;
+    PlayerDetectListener detectListener;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
-        moveMent = new PlayerMoveMent(rigid);
+        moveMent = new PlayerMoveMent(this.gameObject);
+        detectListener = new PlayerDetectListener(this.gameObject);
     }
     private void Update()
     {
@@ -23,18 +25,35 @@ public class Player : MonoBehaviour
         moveMent.Moving();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "ground") Debug.Log("바닥과 충돌");
+    }
+
 }
 class PlayerMoveMent
 {
-    Rigidbody current;
-    public PlayerMoveMent(Rigidbody rigidbody)
+    GameObject current;
+    Rigidbody rigid;
+    public PlayerMoveMent(GameObject gameObject)
     {
-        this.current = rigidbody;
+        this.current = gameObject;
+        rigid = gameObject.GetComponent<Rigidbody>();
     }
     public void Moving()
     {
         float h = Input.GetAxisRaw("Horizontal") * Time.deltaTime * Player.speed;
         float v = Input.GetAxisRaw("Vertical") * Time.deltaTime * Player.speed;
-        current.AddForce(new Vector3(h, 0, v), ForceMode.VelocityChange);
+        rigid.AddForce(new Vector3(h, 0, v), ForceMode.VelocityChange);
+    }
+}
+class PlayerDetectListener
+{
+    GameObject current;
+    Rigidbody rigid;
+    public PlayerDetectListener(GameObject gameObject)
+    {
+        this.current = gameObject;
+        rigid = gameObject.GetComponent<Rigidbody>();
     }
 }
