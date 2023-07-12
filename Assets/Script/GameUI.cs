@@ -13,6 +13,7 @@ public class GameUI
     public void SetPlayTime(float playTime)
     {
         int second = (int) playTime % 60;
-        playTimeComponent.text = "Play Time 00 : " + string.Format("{0:0#}", second);
+        int minute = (int) playTime / 60;
+        playTimeComponent.text = "Play Time " + string.Format("{0:0#}", minute) + " : " + string.Format("{0:0#}", second);
     }   
 }
