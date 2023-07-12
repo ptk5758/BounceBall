@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public static float speed = 50f; // 기본 50 딱좋아보임
+    public static float speed = 50f; // ???? 50 ??????????
     public static float jump = 80f;
     public static int bounce = 0;
     Rigidbody rigid;
@@ -64,6 +64,5 @@ class PlayerDetectListener
     {
         rigid.AddForce(new Vector3(0,Player.jump,0), ForceMode.Impulse);
         Player.bounce++;
-        Debug.Log(Player.bounce);
     }
 }
