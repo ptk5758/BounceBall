@@ -10,18 +10,24 @@ public class Player : MonoBehaviour
     Rigidbody rigid;
     PlayerMoveMent moveMent;
     PlayerDetectListener detectListener;
+    [SerializeField] PlayerCamera playerCamera;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         moveMent = new PlayerMoveMent(this.gameObject);
         detectListener = new PlayerDetectListener(this.gameObject);
+        playerCamera.SetPlayer(this.gameObject);
     }
+
+    private void Start()
+    {
+        
+    }
+
     private void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.Alpha1)) speed++;
-        if (Input.GetKeyDown(KeyCode.Alpha2)) speed--;
-        Debug.Log(speed);*/
+        playerCamera.Update();
     }
 
     private void LateUpdate()
@@ -35,34 +41,4 @@ public class Player : MonoBehaviour
     }
 
 }
-class PlayerMoveMent
-{
-    GameObject current;
-    Rigidbody rigid;
-    public PlayerMoveMent(GameObject gameObject)
-    {
-        this.current = gameObject;
-        rigid = gameObject.GetComponent<Rigidbody>();
-    }
-    public void Moving()
-    {
-        float h = Input.GetAxisRaw("Horizontal") * Time.deltaTime * Player.speed;
-        float v = Input.GetAxisRaw("Vertical") * Time.deltaTime * Player.speed;
-        rigid.AddForce(new Vector3(h, 0, v), ForceMode.Impulse);
-    }
-}
-class PlayerDetectListener
-{
-    GameObject current;
-    Rigidbody rigid;
-    public PlayerDetectListener(GameObject gameObject)
-    {
-        this.current = gameObject;
-        rigid = gameObject.GetComponent<Rigidbody>();
-    }
-    public void OnDetectGround()
-    {
-        rigid.AddForce(new Vector3(0,Player.jump,0), ForceMode.Impulse);
-        Player.bounce++;
-    }
-}
+
